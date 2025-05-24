@@ -1,0 +1,3 @@
+[submodule "supply-sovereign-amm/lib/forge-std"]
+	path = supply-sovereign-amm/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
