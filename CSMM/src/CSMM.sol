@@ -11,6 +11,8 @@ import {BeforeSwapDelta, toBeforeSwapDelta} from "v4-core/types/BeforeSwapDelta.
 import {BaseHook} from "v4-periphery/src/utils/BaseHook.sol";
 import "v4-core/libraries/Pool.sol";
 import {IHooks} from "v4-core/interfaces/IHooks.sol";
+import "v4-core/types/PoolOperation.sol";
+
 struct CallBackData {
     uint256 amountEach;
     Currency currency0;
@@ -63,12 +65,12 @@ contract CSMM is BaseHook {
         });
     }
 
-    function beforeAddLiqudity(
+    function beforeAddLiquidity(
         address,
         PoolKey calldata,
-        Pool.ModifyLiquidityParams calldata,
+        ModifyLiquidityParams calldata,
         bytes calldata
-    ) external pure returns (bytes4) {
+    ) external pure override returns (bytes4) {
         revert CSMM__NotPossibleToAddLiquidityThroughHook();
     }
 
@@ -95,7 +97,7 @@ contract CSMM is BaseHook {
         );
     }
 
-    function unclockCallback(
+    function unlockCallback(
         bytes calldata data
     ) external onlyPoolManager returns (bytes memory) {
         CallBackData memory callBackData = abi.decode(data, (CallBackData));
@@ -135,9 +137,9 @@ contract CSMM is BaseHook {
     function beforeSwap(
         address sender,
         PoolKey calldata key,
-        Pool.SwapParams calldata params,
+        SwapParams calldata params,
         bytes calldata
-    ) external returns (bytes4, BeforeSwapDelta, uint24) {
+    ) external override returns (bytes4, BeforeSwapDelta, uint24) {
         //TODO
         // 1. Get the absolute value of how many tokens the user wants to swap
         uint256 amountInOutPositive = params.amountSpecified > 0

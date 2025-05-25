@@ -77,7 +77,7 @@ contract Deployers is Test {
 
     modifier noIsolate() {
         if (msg.sender != address(this)) {
-            (bool success,) = address(this).call(msg.data);
+            (bool success, ) = address(this).call(msg.data);
             require(success);
         } else {
             _;
@@ -110,8 +110,10 @@ contract Deployers is Test {
         Currency _currencyA = deployMintAndApproveCurrency();
         Currency _currencyB = deployMintAndApproveCurrency();
 
-        (currency0, currency1) =
-            SortTokens.sort(MockERC20(Currency.unwrap(_currencyA)), MockERC20(Currency.unwrap(_currencyB)));
+        (currency0, currency1) = SortTokens.sort(
+            MockERC20(Currency.unwrap(_currencyA)),
+            MockERC20(Currency.unwrap(_currencyB))
+        );
         return (currency0, currency1);
     }
 
@@ -150,11 +152,14 @@ contract Deployers is Test {
         }
     }
 
-    function initPool(Currency _currency0, Currency _currency1, IHooks hooks, uint24 fee, uint160 sqrtPriceX96)
-        internal
-        returns (PoolKey memory _key, PoolId id)
-    {
-        _key = PoolKey(_currency0, _currency1, fee, fee.isDynamicFee() ? int24(60) : int24(fee / 100 * 2), hooks);
+    function initPool(
+        Currency _currency0,
+        Currency _currency1,
+        IHooks hooks,
+        uint24 fee,
+        uint160 sqrtPriceX96
+    ) internal returns (PoolKey memory _key, PoolId id) {
+        _key = PoolKey(_currency0, _currency1, fee, fee.isDynamicFee() ? int24(60) : int24((fee / 100) * 2), hooks);
         id = _key.toId();
         manager.initialize(_key, sqrtPriceX96);
     }
@@ -200,10 +205,16 @@ contract Deployers is Test {
         deployFreshManagerAndRouters();
         // sets the global currencies and key
         deployMintAndApprove2Currencies();
-        (key,) = initPoolAndAddLiquidity(currency0, currency1, hooks, 3000, SQRT_PRICE_1_1);
+        (key, ) = initPoolAndAddLiquidity(currency0, currency1, hooks, 3000, SQRT_PRICE_1_1);
         nestedActionRouter.executor().setKey(key);
-        (nativeKey,) =
-            initPoolAndAddLiquidityETH(CurrencyLibrary.ADDRESS_ZERO, currency1, hooks, 3000, SQRT_PRICE_1_1, 1 ether);
+        (nativeKey, ) = initPoolAndAddLiquidityETH(
+            CurrencyLibrary.ADDRESS_ZERO,
+            currency1,
+            hooks,
+            3000,
+            SQRT_PRICE_1_1,
+            1 ether
+        );
         uninitializedKey = key;
         uninitializedNativeKey = nativeKey;
         uninitializedKey.fee = 100;
@@ -211,32 +222,35 @@ contract Deployers is Test {
     }
 
     /// @notice Helper function for a simple ERC20 swaps that allows for unlimited price impact
-    function swap(PoolKey memory _key, bool zeroForOne, int256 amountSpecified, bytes memory hookData)
-        internal
-        returns (BalanceDelta)
-    {
+    function swap(
+        PoolKey memory _key,
+        bool zeroForOne,
+        int256 amountSpecified,
+        bytes memory hookData
+    ) internal returns (BalanceDelta) {
         // allow native input for exact-input, guide users to the `swapNativeInput` function
         bool isNativeInput = zeroForOne && _key.currency0.isAddressZero();
         if (isNativeInput) require(0 > amountSpecified, "Use swapNativeInput() for native-token exact-output swaps");
 
         uint256 value = isNativeInput ? uint256(-amountSpecified) : 0;
 
-        return swapRouter.swap{value: value}(
-            _key,
-            SwapParams({
-                zeroForOne: zeroForOne,
-                amountSpecified: amountSpecified,
-                sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT
-            }),
-            PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false}),
-            hookData
-        );
+        return
+            swapRouter.swap{value: value}(
+                _key,
+                SwapParams({
+                    zeroForOne: zeroForOne,
+                    amountSpecified: amountSpecified,
+                    sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT
+                }),
+                PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false}),
+                hookData
+            );
     }
 
     /// @notice Helper function to increase balance of pool manager.
     /// Uses default LIQUIDITY_PARAMS range.
     function seedMoreLiquidity(PoolKey memory _key, uint256 amount0, uint256 amount1) internal {
-        (uint160 sqrtPriceX96,,,) = manager.getSlot0(_key.toId());
+        (uint160 sqrtPriceX96, , , ) = manager.getSlot0(_key.toId());
         uint128 liquidityDelta = LiquidityAmounts.getLiquidityForAmounts(
             sqrtPriceX96,
             TickMath.getSqrtPriceAtTick(LIQUIDITY_PARAMS.tickLower),
@@ -266,16 +280,17 @@ contract Deployers is Test {
         require(_key.currency0.isAddressZero(), "currency0 is not native. Use swap() instead");
         if (zeroForOne == false) require(msgValue == 0, "msgValue must be 0 for oneForZero swaps");
 
-        return swapRouter.swap{value: msgValue}(
-            _key,
-            SwapParams({
-                zeroForOne: zeroForOne,
-                amountSpecified: amountSpecified,
-                sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT
-            }),
-            PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false}),
-            hookData
-        );
+        return
+            swapRouter.swap{value: msgValue}(
+                _key,
+                SwapParams({
+                    zeroForOne: zeroForOne,
+                    amountSpecified: amountSpecified,
+                    sqrtPriceLimitX96: zeroForOne ? MIN_PRICE_LIMIT : MAX_PRICE_LIMIT
+                }),
+                PoolSwapTest.TestSettings({takeClaims: false, settleUsingBurn: false}),
+                hookData
+            );
     }
 
     // to receive refunds of spare eth from test helpers
