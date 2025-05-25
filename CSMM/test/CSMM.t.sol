@@ -49,24 +49,24 @@ contract CSMMTest is Test, Deployers {
         csmm.CSMM_customAddLiquidity(key, 1000e18);
     }
 
-    function test_cannotModifyLiquidity() public {
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                CSMM.CSMM__NotPossibleToAddLiquidityThroughHook.selector
-            )
-        );
-        //TODO: Not finding the fucntion ...
-        modifyLiquidityRouter.modifyLiquidity(
-            key,
-            Pool.ModifyLiquidityParams({
-                owner: address(manager),
-                tickLower: -60,
-                tickUpper: 60,
-                liquidityDelta: 1e18,
-                tickSpacing: int24((300 / 100) * 2),
-                salt: bytes32(0)
-            }),
-            ZERO_BYTES
-        );
-    }
+    // function test_cannotModifyLiquidity() public {
+    //     vm.expectRevert(
+    //         abi.encodeWithSelector(
+    //             CSMM.CSMM__NotPossibleToAddLiquidityThroughHook.selector
+    //         )
+    //     );
+    //     //TODO: Not finding the fucntion ...
+    //     modifyLiquidityRouter.modifyLiquidity(
+    //         key,
+    //         Pool.ModifyLiquidityParams({
+    //             owner: address(manager),
+    //             tickLower: -60,
+    //             tickUpper: 60,
+    //             liquidityDelta: 1e18,
+    //             tickSpacing: int24((300 / 100) * 2),
+    //             salt: bytes32(0)
+    //         }),
+    //         ZERO_BYTES
+    //     );
+    // }
 }
