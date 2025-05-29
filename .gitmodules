@@ -10,3 +10,6 @@
 [submodule "upgradableCurveAMM/lib/solidstate-solidity"]
 	path = upgradableCurveAMM/lib/solidstate-solidity
 	url = https://github.com/solidstate-network/solidstate-solidity
+[submodule "upgradableCurveAMM/lib/v4-periphery"]
+	path = upgradableCurveAMM/lib/v4-periphery
+	url = https://github.com/Uniswap/v4-periphery
