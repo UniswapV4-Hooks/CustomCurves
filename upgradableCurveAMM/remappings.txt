@@ -1,0 +1,17 @@
+@ensdomains/=lib/diamondxhook-uhi-cohort1/lib/v4-core/node_modules/@ensdomains/
+@openzeppelin/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/openzeppelin-contracts/
+@uniswap/v4-core/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/v4-core/
+diamondxhook/=lib/diamondxhook-uhi-cohort1/
+ds-test/=lib/diamondxhook-uhi-cohort1/lib/forge-std/lib/ds-test/src/
+erc4626-tests/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/openzeppelin-contracts/lib/erc4626-tests/
+forge-gas-snapshot/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/forge-gas-snapshot/src/
+forge-std/=lib/forge-std/src/
+hardhat/=lib/diamondxhook-uhi-cohort1/lib/v4-core/node_modules/hardhat/
+openzeppelin-contracts/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/openzeppelin-contracts/
+openzeppelin/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/openzeppelin-contracts/contracts/
+solady/=lib/diamondxhook-uhi-cohort1/lib/solady/src/
+solidstate-solidity/=lib/solidstate-solidity/contracts/
+solmate/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/lib/solmate/src/
+v4-core-test/=lib/diamondxhook-uhi-cohort1/lib/v4-core/test/
+v4-core/=lib/diamondxhook-uhi-cohort1/lib/v4-core/src/
+v4-periphery/=lib/diamondxhook-uhi-cohort1/lib/v4-periphery/contracts/
