@@ -110,7 +110,8 @@ contract CSMM is BaseHook {
             poolManager,
             callBackData.sender,
             callBackData.amountEach,
-            false // `burn` = `false` i.e. we're actually transferring tokens, not burning ERC-6909 Claim Tokens
+            false // `burn` = `false` i.e.
+            // we're actually transferring tokens, not burning ERC-6909 Claim Tokens
         );
         callBackData.currency1.settle(
             poolManager,
